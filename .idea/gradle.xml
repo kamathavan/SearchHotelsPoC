@@ -17,6 +17,8 @@
             <option value="$PROJECT_DIR$/data/local/localdatasearch" />
             <option value="$PROJECT_DIR$/data/remote" />
             <option value="$PROJECT_DIR$/data/remote/search" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/domain/search" />
           </set>
         </option>
       </GradleProjectSettings>

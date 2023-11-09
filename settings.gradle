@@ -17,3 +17,4 @@ rootProject.name = "SearchHotel"
 include ':app'
 include ':data:local:localdatasearch'
 include ':data:remote:search'
+include ':domain:search'
