@@ -8,7 +8,7 @@ data class HotelSearchResultResponse(
 data class Hotel(
     val location: HotelsLocation,
     val id: String,
-    val _score: Float,
+    val _score: Long,
     val locationId: Int,
     val label: String,
     val locationName: String,
@@ -16,6 +16,6 @@ data class Hotel(
 )
 
 class HotelsLocation(
-    val lat: Double,
-    val lon: Double,
+    val lat: Long,
+    val lon: Long,
 )
