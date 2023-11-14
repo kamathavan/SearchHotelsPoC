@@ -10,14 +10,12 @@ interface HotelSearchApi {
         @Query("query") query: String,
         @Query("lang") lang: String = "en",
         @Query("lookFor") lookFor: String = "hotel",
-        @Query("limit") limit: String = "20"
+        @Query("limit") limit: Int = 20
     ): HotelSearchResultResponse
 
     companion object {
         const val TIME_OUT = 30
-        const val MAIN_BASE_URL =
-            "https://engine.hotellook.com/api/v2/lookup.json?query=chennai&lang=en&lookFor=hotel&limit=20"
         const val BASE_URL = "https://engine.hotellook.com/"
-        const val SEARCH_ENDPOINT = "api/v2/lookup.json?"
+        const val SEARCH_ENDPOINT = "api/v2/lookup.json"
     }
 }

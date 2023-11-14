@@ -6,7 +6,7 @@ import javax.inject.Inject
 class GetHotelSearchResultUseCase @Inject constructor(
     private val hotelSearchRepository: HotelSearchRepository
 ) {
-    suspend operator fun invoke(search: String) = hotelSearchRepository.getHotelSearch(
+    suspend fun getHotelSearch(search: String) = hotelSearchRepository.getHotelSearch(
         searchQuery = search
     )
 }

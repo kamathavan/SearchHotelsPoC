@@ -2,7 +2,11 @@ package com.app.test.search.remote.responsemodel
 
 data class HotelSearchResultResponse(
     val status: String,
-    val results: List<Hotel>,
+    val results: Hotels,
+)
+
+data class Hotels(
+    val hotels: List<Hotel>
 )
 
 data class Hotel(
@@ -16,6 +20,6 @@ data class Hotel(
 )
 
 class HotelsLocation(
-    val lat: Long,
-    val lon: Long,
+    val lat: Double,
+    val lon: Double,
 )

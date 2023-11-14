@@ -11,6 +11,6 @@ data class Hotel(
 )
 
 data class HotelGeoLocation(
-    val lat: Long,
-    val long: Long,
+    val lat: Double,
+    val long: Double,
 )

@@ -4,12 +4,13 @@ import com.app.test.domain.search.models.Hotel
 import com.app.test.domain.search.models.HotelGeoLocation
 import com.app.test.search.remote.responsemodel.HotelSearchResultResponse
 import com.app.test.search.remote.responsemodel.HotelsLocation
+import javax.inject.Inject
 
-class HotelSearchResponseMapper {
+class HotelSearchResponseMapper @Inject constructor() {
 
     fun transform(hotelSearchResponse: HotelSearchResultResponse): List<Hotel> {
         val hotelList = mutableListOf<Hotel>()
-        hotelSearchResponse.results.forEach { hotelResp ->
+        hotelSearchResponse.results.hotels.forEach { hotelResp ->
             val hotel = Hotel(
                 hotelId = hotelResp.id,
                 hotelName = hotelResp.label,
