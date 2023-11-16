@@ -1,6 +1,5 @@
 package com.app.test.search.place.ui.searchlist
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,29 +22,55 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.app.test.domain.search.models.Hotel
+import com.app.test.search.place.ui.Screens
 import com.app.test.search.place.ui.model.HotelSearchUiState
+import com.app.test.search.place.ui.searchdetails.HotelDetailsScreen
 
 @Composable
 fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()) {
 
     val state = searchViewModel.uiState.observeAsState()
 
-    state.value?.let {
-        when (it) {
+    state.value?.let { state ->
+        when (state) {
             is HotelSearchUiState.Loading -> {
                 LoadingContent()
             }
 
             is HotelSearchUiState.Success -> {
-                ShowHotelSearchList(it.hotels)
+                HotelNavigation(state.hotels)
             }
 
             is HotelSearchUiState.Error -> {
-                ErrorScreen(it.message)
+                ErrorScreen(state.message)
             }
         }
     }
+}
+
+@Composable
+fun HotelNavigation(hotels: List<Hotel>) {
+    val hotelNavigationController = rememberNavController()
+
+    NavHost(navController = hotelNavigationController, startDestination = Screens.HotelList.route) {
+
+        composable(route = Screens.HotelDetails.route) {
+            ShowHotelSearchList(
+                navigationController = hotelNavigationController,
+                hotels = hotels,
+            )
+        }
+
+        composable(route = Screens.HotelDetails.route){
+            HotelDetailsScreen()
+        }
+    }
+
 }
 
 @Composable
@@ -77,7 +102,10 @@ fun ErrorScreen(error: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowHotelSearchList(hotels: List<Hotel>) {
+fun ShowHotelSearchList(
+    navigationController: NavController,
+    hotels: List<Hotel>,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
