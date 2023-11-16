@@ -1,12 +1,17 @@
 package com.app.test.search.place.ui.searchlist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,7 +38,7 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
             }
 
             is HotelSearchUiState.Success -> {
-                showHotelSearchList(it.hotels)
+                ShowHotelSearchList(it.hotels)
             }
 
             is HotelSearchUiState.Error -> {
@@ -70,18 +75,40 @@ fun ErrorScreen(error: String) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun showHotelSearchList(hotels: List<Hotel>) {
+fun ShowHotelSearchList(hotels: List<Hotel>) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)
+    ) {
+
+    }
     LazyColumn(
         modifier = Modifier.padding(10.dp),
         userScrollEnabled = true,
     ) {
         items(hotels) { hotel ->
-            Text(
-                text = hotel.hotelName,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-            )
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .padding(5.dp),
+                onClick = {
+
+                }
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth(),
+                    text = hotel.hotelName,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
