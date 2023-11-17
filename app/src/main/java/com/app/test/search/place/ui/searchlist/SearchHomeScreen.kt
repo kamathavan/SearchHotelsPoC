@@ -51,7 +51,6 @@ const val HOTEL_ID_KEY = "hotelId"
 fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()) {
 
     val state = searchViewModel.uiState.observeAsState()
-    val focusManager = LocalFocusManager.current
 
     val searchViewModel = viewModel<HotelSearchListViewModel>()
     val searchText by searchViewModel.searchText.collectAsState()
@@ -64,7 +63,6 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
 
             is HotelSearchUiState.Success -> {
                 HotelNavigation(state.hotels, searchViewModel, searchText)
-                focusManager.clearFocus()
             }
 
             is HotelSearchUiState.Error -> {
