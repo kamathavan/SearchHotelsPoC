@@ -3,6 +3,7 @@ package com.app.test.search.place.ui.searchdetails
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,14 +20,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.app.test.domain.search.models.Hotel
+import com.app.test.domain.search.models.HotelGeoLocation
 import com.app.test.search.place.R
 import com.app.test.search.place.ui.theme.SearchHotelTheme
 
 @Composable
-fun HotelDetailsScreen() {
+fun HotelDetailsScreen(hotel: Hotel) {
     Surface(
         modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
     ) {
@@ -39,18 +45,80 @@ fun HotelDetailsScreen() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(
-                    text = "Welcome to Hotel Details screen",
-                    modifier = Modifier.padding(10.dp)
-                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = hotel.hotelName,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Start
+                    )
+                }
+
+                Title(contentTitle = "Address")
+
+                ContentTitle(hotel.address)
+                /* Text(
+                     text = hotel.address,
+                     textAlign = TextAlign.Justify
+                 )*/
+
+                Title(contentTitle = "Location")
+
+                /*Text(
+                    text = hotel.locationName,
+                    textAlign = TextAlign.Justify
+                )*/
+                ContentTitle(hotel.locationName)
+
+                Title(contentTitle = "Hotel Rating Points")
+
+                ContentTitle(hotel.hotelScorePoint)
             }
         }
     }
 }
 
+@Composable
+fun Title(contentTitle: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Text(
+            text = contentTitle,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Start
+        )
+    }
+}
+
+@Composable
+fun ContentTitle(contentTitle: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Text(
+            text = contentTitle,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Light,
+            textAlign = TextAlign.Start
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,6 +158,18 @@ fun AppBar(title: String) {
 @Composable
 fun HotelDetailsScreenPreview() {
     SearchHotelTheme {
-        HotelDetailsScreen()
+        HotelDetailsScreen(
+            hotel = Hotel(
+                hotelId = "",
+                hotelName = "Testing Hotel",
+                locationId = 0,
+                locationName = "",
+                address = "",
+                hotelScorePoint = "",
+                geoLocation = HotelGeoLocation(
+                    12.90, 45.90
+                )
+            )
+        )
     }
 }

@@ -31,6 +31,8 @@ import com.app.test.search.place.ui.Screens
 import com.app.test.search.place.ui.model.HotelSearchUiState
 import com.app.test.search.place.ui.searchdetails.HotelDetailsScreen
 
+const val HOTEL_ID_KEY = "hotelId"
+
 @Composable
 fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()) {
 
@@ -59,15 +61,21 @@ fun HotelNavigation(hotels: List<Hotel>) {
 
     NavHost(navController = hotelNavigationController, startDestination = Screens.HotelList.route) {
 
-        composable(route = Screens.HotelDetails.route) {
+        composable(route = Screens.HotelList.route) {
             ShowHotelSearchList(
                 navigationController = hotelNavigationController,
                 hotels = hotels,
             )
         }
 
-        composable(route = Screens.HotelDetails.route){
-            HotelDetailsScreen()
+        composable(route = "${Screens.HotelDetails.route}/{$HOTEL_ID_KEY}") {
+            val hotelId = it.arguments?.getString(HOTEL_ID_KEY)
+            val hotel = hotels.first { hotel ->
+                (hotel.hotelId == hotelId)
+            }
+            HotelDetailsScreen(
+                hotel = hotel
+            )
         }
     }
 
@@ -76,8 +84,7 @@ fun HotelNavigation(hotels: List<Hotel>) {
 @Composable
 fun LoadingContent() {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(modifier = Modifier.align(alignment = Alignment.Center))
     }
@@ -86,8 +93,7 @@ fun LoadingContent() {
 @Composable
 fun ErrorScreen(error: String) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
     ) {
         Text(
             text = error,
@@ -118,15 +124,15 @@ fun ShowHotelSearchList(
         userScrollEnabled = true,
     ) {
         items(hotels) { hotel ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(5.dp),
+            Card(modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .padding(5.dp),
                 onClick = {
-
-                }
-            ) {
+                    navigationController.navigate(
+                        route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
+                    )
+                }) {
                 Text(
                     modifier = Modifier
                         .padding(5.dp)
