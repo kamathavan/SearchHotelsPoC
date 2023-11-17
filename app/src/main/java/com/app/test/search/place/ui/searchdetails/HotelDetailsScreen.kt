@@ -65,17 +65,9 @@ fun HotelDetailsScreen(hotel: Hotel) {
                 Title(contentTitle = "Address")
 
                 ContentTitle(hotel.address)
-                /* Text(
-                     text = hotel.address,
-                     textAlign = TextAlign.Justify
-                 )*/
 
                 Title(contentTitle = "Location")
 
-                /*Text(
-                    text = hotel.locationName,
-                    textAlign = TextAlign.Justify
-                )*/
                 ContentTitle(hotel.locationName)
 
                 Title(contentTitle = "Hotel Rating Points")

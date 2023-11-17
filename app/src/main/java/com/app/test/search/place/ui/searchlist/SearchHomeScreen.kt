@@ -1,7 +1,5 @@
 package com.app.test.search.place.ui.searchlist
 
-import android.graphics.drawable.shapes.OvalShape
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +15,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,14 +27,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -44,11 +36,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.app.test.domain.search.models.Hotel
 import com.app.test.search.place.ui.Screens
 import com.app.test.search.place.ui.model.HotelSearchUiState
@@ -61,6 +53,10 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
 
     val state = searchViewModel.uiState.observeAsState()
     val focusManager = LocalFocusManager.current
+
+    val searchViewModel = viewModel<HotelSearchListViewModel>()
+    val searchText by searchViewModel.searchText.collectAsState()
+
     state.value?.let { state ->
         when (state) {
             is HotelSearchUiState.Loading -> {
@@ -68,7 +64,7 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
             }
 
             is HotelSearchUiState.Success -> {
-                HotelNavigation(state.hotels)
+                HotelNavigation(state.hotels, searchViewModel, searchText)
                 focusManager.clearFocus()
             }
 
@@ -80,7 +76,11 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
 }
 
 @Composable
-fun HotelNavigation(hotels: List<Hotel>) {
+fun HotelNavigation(
+    hotels: List<Hotel>,
+    searchViewModel: HotelSearchListViewModel,
+    searchText: String,
+) {
     val hotelNavigationController = rememberNavController()
 
     NavHost(navController = hotelNavigationController, startDestination = Screens.HotelList.route) {
@@ -89,6 +89,8 @@ fun HotelNavigation(hotels: List<Hotel>) {
             ShowHotelSearchList(
                 navigationController = hotelNavigationController,
                 hotels = hotels,
+                searchViewModel,
+                searchText
             )
         }
 
@@ -106,29 +108,32 @@ fun HotelNavigation(hotels: List<Hotel>) {
 }
 
 @Composable
-fun SearchView() {
-    val searchViewModel = viewModel<HotelSearchListViewModel>()
-    val searchText by searchViewModel.searchText.collectAsState()
-        TextField(value = searchText,
-            onValueChange = searchViewModel::onSearchTextChange,
-            placeholder = { Text(text = "Enter Location")},
-            modifier = Modifier.fillMaxWidth(),
-            leadingIcon = {
-                Icon(Icons.Default.Search,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(15.dp)
-                        .size(24.dp)
-                )
-            },
-            singleLine = true,
-            shape = RectangleShape,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(
-                onSearch = { searchViewModel.getHotelSearch(searchText)},
-            ))
-
-    }
+fun SearchView(
+    searchViewModel: HotelSearchListViewModel,
+    searchString: String
+) {
+    OutlinedTextField(
+        value = searchString,
+        onValueChange = searchViewModel::onSearchTextChange,
+        placeholder = { Text(text = "Enter Location") },
+        modifier = Modifier.fillMaxWidth(),
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(15.dp)
+                    .size(24.dp)
+            )
+        },
+        singleLine = true,
+        shape = RectangleShape,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(
+            onSearch = { searchViewModel.getHotelSearch(searchString) },
+        )
+    )
+}
 
 @Composable
 fun LoadingContent() {
@@ -160,39 +165,45 @@ fun ErrorScreen(error: String) {
 fun ShowHotelSearchList(
     navigationController: NavController,
     hotels: List<Hotel>,
+    searchViewModel: HotelSearchListViewModel,
+    searchText: String
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
+        SearchView(searchViewModel, searchText)
 
-    }
-    LazyColumn(
-        modifier = Modifier.padding(10.dp),
-        userScrollEnabled = true,
-    ) {
-        items(hotels) { hotel ->
-            Card(modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp)
-                .padding(5.dp),
-                onClick = {
-                    navigationController.navigate(
-                        route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn(
+            modifier = Modifier.padding(10.dp),
+            userScrollEnabled = true,
+        ) {
+            items(hotels) { hotel ->
+                Card(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+                    .padding(5.dp),
+                    onClick = {
+                        navigationController.navigate(
+                            route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
+                        )
+                    }) {
+                    Text(
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .fillMaxWidth(),
+                        text = hotel.hotelName,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.Center
                     )
-                }) {
-                Text(
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .fillMaxWidth(),
-                    text = hotel.hotelName,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                    textAlign = TextAlign.Center
-                )
+                }
             }
         }
     }
+
 }
 

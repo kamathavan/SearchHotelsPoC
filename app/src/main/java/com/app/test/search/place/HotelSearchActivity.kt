@@ -36,7 +36,7 @@ class HotelSearchActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    SearchHomeScreen()
                 }
             }
         }
