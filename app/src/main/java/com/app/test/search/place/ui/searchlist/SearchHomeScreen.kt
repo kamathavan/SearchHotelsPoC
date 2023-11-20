@@ -1,7 +1,9 @@
 package com.app.test.search.place.ui.searchlist
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,11 +16,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -26,13 +34,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,8 +58,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.app.test.domain.search.models.Hotel
+import com.app.test.search.place.R
 import com.app.test.search.place.ui.Screens
 import com.app.test.search.place.ui.model.HotelSearchUiState
+import com.app.test.search.place.ui.searchdetails.AppBar
 import com.app.test.search.place.ui.searchdetails.HotelDetailsScreen
 
 const val HOTEL_ID_KEY = "hotelId"
@@ -124,6 +142,7 @@ fun SearchView(
                     .size(24.dp)
             )
         },
+        trailingIcon = if (searchViewModel.getSearchText().isEmpty()) speechIconView else clearIconView,
         singleLine = true,
         shape = CircleShape,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -131,6 +150,56 @@ fun SearchView(
             onSearch = { searchViewModel.getHotelSearch(searchString) },
         )
     )
+}
+
+val clearIconView = @Composable {
+    IconButton(
+        onClick = { },
+    ) {
+        Icon(
+            Icons.Default.Clear,
+            contentDescription = "",
+            tint = Color.Black
+        )
+    }
+}
+
+val speechIconView = @Composable {
+    val context = LocalContext.current
+    IconButton(
+        onClick = { },
+    ) {
+        Icon(
+            Icons.Filled.PlayArrow,
+            contentDescription = "",
+            tint = Color.Black
+        )
+    }
+}
+@Composable
+fun AddButton() {
+    var isWishlisted by remember { mutableStateOf(false) }
+
+    IconToggleButton(
+        checked = isWishlisted,
+        onCheckedChange = {
+            isWishlisted = !isWishlisted
+        }
+    ) {
+        Icon(
+            tint = Color.Black,
+            modifier = Modifier.graphicsLayer {
+                scaleX = 1.0f
+                scaleY = 1.0f
+            },
+            imageVector = if (isWishlisted) {
+                Icons.Filled.Favorite
+            } else {
+                Icons.Default.FavoriteBorder
+            },
+            contentDescription = null
+        )
+    }
 }
 
 @Composable
@@ -166,9 +235,13 @@ fun ShowHotelSearchList(
     searchViewModel: HotelSearchListViewModel,
     searchText: String
 ) {
+    Column {
+        AppBar(title = stringResource(id = R.string.app_name),
+            )
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(10.dp)
             .padding(16.dp)
     ) {
         SearchView(searchViewModel, searchText)
@@ -188,19 +261,31 @@ fun ShowHotelSearchList(
                             route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
                         )
                     }) {
-                    Text(
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .fillMaxWidth(),
-                        text = hotel.hotelName,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Normal,
-                        textAlign = TextAlign.Center
-                    )
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .weight(1f, fill = false),
+                            text = hotel.hotelName,
+                            maxLines = 1,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow . Ellipsis
+                        )
+                        AddButton()
+                    }
                 }
             }
         }
-    }
+    }}
+
 
 }
 
