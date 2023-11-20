@@ -51,7 +51,6 @@ const val HOTEL_ID_KEY = "hotelId"
 fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()) {
 
     val state = searchViewModel.uiState.observeAsState()
-    val focusManager = LocalFocusManager.current
 
     val searchViewModel = viewModel<HotelSearchListViewModel>()
     val searchText by searchViewModel.searchText.collectAsState()
@@ -64,7 +63,6 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
 
             is HotelSearchUiState.Success -> {
                 HotelNavigation(state.hotels, searchViewModel, searchText)
-                focusManager.clearFocus()
             }
 
             is HotelSearchUiState.Error -> {
@@ -170,21 +168,20 @@ fun ShowHotelSearchList(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(16.dp)
     ) {
         SearchView(searchViewModel, searchText)
 
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn(
-            modifier = Modifier.padding(10.dp),
             userScrollEnabled = true,
         ) {
             items(hotels) { hotel ->
                 Card(modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .padding(5.dp),
+                    .padding(top = 5.dp),
                     onClick = {
                         navigationController.navigate(
                             route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
