@@ -31,6 +31,7 @@ import com.app.test.domain.search.models.HotelGeoLocation
 import com.app.test.search.place.R
 import com.app.test.search.place.ui.theme.SearchHotelTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HotelDetailsScreen(hotel: Hotel) {
     Surface(
