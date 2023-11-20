@@ -13,8 +13,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -158,7 +159,19 @@ val speechIconView = @Composable {
         onClick = { },
     ) {
         Icon(
-            Icons.Default.AccountCircle,
+            Icons.Filled.PlayArrow,
+            contentDescription = "",
+            tint = Color.Black
+        )
+    }
+}
+@Composable
+fun AddButton() {
+    IconButton(
+        onClick = { },
+    ) {
+        Icon(
+            Icons.Filled.AddCircle,
             contentDescription = "",
             tint = Color.Black
         )
@@ -199,7 +212,8 @@ fun ShowHotelSearchList(
     searchText: String
 ) {
     Column {
-        AppBar(title = stringResource(id = R.string.app_name))
+        AppBar(title = stringResource(id = R.string.app_name),
+            )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -232,6 +246,7 @@ fun ShowHotelSearchList(
                         fontWeight = FontWeight.Normal,
                         textAlign = TextAlign.Center
                     )
+                    AddButton()
                 }
             }
         }
