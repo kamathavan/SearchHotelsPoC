@@ -26,6 +26,11 @@ class HotelSearchListViewModel @Inject constructor(
     fun onSearchTextChange(text:String){
         _searchText.value =  text
     }
+
+    fun getSearchText() : String{
+        return searchText.value
+    }
+
     init {
         getHotelSearch(location = "")
     }
