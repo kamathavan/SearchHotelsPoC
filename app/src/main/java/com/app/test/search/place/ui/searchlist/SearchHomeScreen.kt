@@ -1,7 +1,9 @@
 package com.app.test.search.place.ui.searchlist
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +15,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
@@ -22,6 +25,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -29,15 +33,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -167,13 +176,26 @@ val speechIconView = @Composable {
 }
 @Composable
 fun AddButton() {
-    IconButton(
-        onClick = { },
+    var isWishlisted by remember { mutableStateOf(false) }
+
+    IconToggleButton(
+        checked = isWishlisted,
+        onCheckedChange = {
+            isWishlisted = !isWishlisted
+        }
     ) {
         Icon(
-            Icons.Filled.AddCircle,
-            contentDescription = "",
-            tint = Color.Black
+            tint = Color.Black,
+            modifier = Modifier.graphicsLayer {
+                scaleX = 1.0f
+                scaleY = 1.0f
+            },
+            imageVector = if (isWishlisted) {
+                Icons.Filled.Favorite
+            } else {
+                Icons.Default.FavoriteBorder
+            },
+            contentDescription = null
         )
     }
 }
@@ -237,16 +259,26 @@ fun ShowHotelSearchList(
                             route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
                         )
                     }) {
-                    Text(
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .fillMaxWidth(),
-                        text = hotel.hotelName,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Normal,
-                        textAlign = TextAlign.Center
-                    )
-                    AddButton()
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                            .weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(
+                            modifier = Modifier
+                                .padding(2.dp)
+                                .weight(1f, fill = false),
+                            text = hotel.hotelName,
+                            maxLines = 1,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal,
+                            textAlign = TextAlign.Center,
+                            overflow = TextOverflow . Ellipsis
+                        )
+                        AddButton()
+                    }
                 }
             }
         }
