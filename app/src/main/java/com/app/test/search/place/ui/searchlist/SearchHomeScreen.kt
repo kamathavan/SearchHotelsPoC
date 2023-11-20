@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -41,8 +42,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.app.test.domain.search.models.Hotel
+import com.app.test.search.place.R
 import com.app.test.search.place.ui.Screens
 import com.app.test.search.place.ui.model.HotelSearchUiState
+import com.app.test.search.place.ui.searchdetails.AppBar
 import com.app.test.search.place.ui.searchdetails.HotelDetailsScreen
 
 const val HOTEL_ID_KEY = "hotelId"
@@ -165,10 +168,12 @@ fun ShowHotelSearchList(
     searchViewModel: HotelSearchListViewModel,
     searchText: String
 ) {
+    Column {
+        AppBar(title = stringResource(id = R.string.app_name))
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
     ) {
         SearchView(searchViewModel, searchText)
 
@@ -200,7 +205,8 @@ fun ShowHotelSearchList(
                 }
             }
         }
-    }
+    }}
+
 
 }
 
