@@ -142,7 +142,11 @@ fun SearchView(
                     .size(24.dp)
             )
         },
-        trailingIcon = if (searchViewModel.getSearchText().isEmpty()) speechIconView else clearIconView,
+        trailingIcon = if (searchViewModel.getSearchText().isEmpty()) {
+            speechIconView
+        } else {
+            clearIconView
+        },
         singleLine = true,
         shape = CircleShape,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -151,6 +155,7 @@ fun SearchView(
         )
     )
 }
+
 
 val clearIconView = @Composable {
     IconButton(
@@ -176,6 +181,7 @@ val speechIconView = @Composable {
         )
     }
 }
+
 @Composable
 fun AddButton() {
     var isWishlisted by remember { mutableStateOf(false) }
@@ -236,55 +242,58 @@ fun ShowHotelSearchList(
     searchText: String
 ) {
     Column {
-        AppBar(title = stringResource(id = R.string.app_name),
-            )
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)
-            .padding(16.dp)
-    ) {
-        SearchView(searchViewModel, searchText)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn(
-            userScrollEnabled = true,
+        AppBar(
+            title = stringResource(id = R.string.app_name),
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp)
+                .padding(16.dp)
         ) {
-            items(hotels) { hotel ->
-                Card(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(top = 5.dp),
-                    onClick = {
-                        navigationController.navigate(
-                            route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
-                        )
-                    }) {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .weight(1f),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(
-                            modifier = Modifier
-                                .padding(2.dp)
-                                .weight(1f, fill = false),
-                            text = hotel.hotelName,
-                            maxLines = 1,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal,
-                            textAlign = TextAlign.Center,
-                            overflow = TextOverflow . Ellipsis
-                        )
-                        AddButton()
+            SearchView(searchViewModel, searchText)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LazyColumn(
+                userScrollEnabled = true,
+            ) {
+                items(hotels) { hotel ->
+                    Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(top = 5.dp),
+                        onClick = {
+                            navigationController.navigate(
+                                route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
+                            )
+                        }) {
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .weight(1f),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(2.dp)
+                                    .weight(1f, fill = false),
+                                text = hotel.hotelName,
+                                maxLines = 1,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            AddButton()
+                        }
                     }
                 }
             }
         }
-    }}
+    }
 
 
 }
