@@ -40,11 +40,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -72,7 +70,7 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
     val state = searchViewModel.uiState.observeAsState()
 
     val searchViewModel = viewModel<HotelSearchListViewModel>()
-    val searchText by searchViewModel.searchText.collectAsState()
+    val searchText by searchViewModel.searchInputFieldText.collectAsState()
 
     state.value?.let { state ->
         when (state) {
@@ -142,10 +140,12 @@ fun SearchView(
                     .size(24.dp)
             )
         },
-        trailingIcon = if (searchViewModel.getSearchText().isEmpty()) {
-            speechIconView
-        } else {
-            clearIconView
+        trailingIcon = {
+            if (searchViewModel.getSearchText().isEmpty()) {
+                speechIconView
+            } else {
+                ClearInputField(searchViewModel)
+            }
         },
         singleLine = true,
         shape = CircleShape,
@@ -157,9 +157,10 @@ fun SearchView(
 }
 
 
-val clearIconView = @Composable {
+@Composable
+fun ClearInputField(viewModel: HotelSearchListViewModel) {
     IconButton(
-        onClick = { },
+        onClick = { viewModel.clearInput()},
     ) {
         Icon(
             Icons.Default.Clear,
