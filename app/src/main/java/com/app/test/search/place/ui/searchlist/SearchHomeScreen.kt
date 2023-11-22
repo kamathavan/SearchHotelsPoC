@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -39,11 +40,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -71,7 +70,7 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
     val state = searchViewModel.uiState.observeAsState()
 
     val searchViewModel = viewModel<HotelSearchListViewModel>()
-    val searchText by searchViewModel.searchText.collectAsState()
+    val searchText by searchViewModel.searchInputFieldText.collectAsState()
 
     state.value?.let { state ->
         when (state) {
@@ -141,9 +140,15 @@ fun SearchView(
                     .size(24.dp)
             )
         },
-        trailingIcon = if (searchViewModel.getSearchText().isEmpty()) speechIconView else clearIconView,
+        trailingIcon = {
+            if (searchViewModel.getSearchText().isEmpty()) {
+                speechIconView
+            } else {
+                ClearInputField(searchViewModel)
+            }
+        },
         singleLine = true,
-        shape = RectangleShape,
+        shape = CircleShape,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
         keyboardActions = KeyboardActions(
             onSearch = { searchViewModel.getHotelSearch(searchString) },
@@ -151,9 +156,11 @@ fun SearchView(
     )
 }
 
-val clearIconView = @Composable {
+
+@Composable
+fun ClearInputField(viewModel: HotelSearchListViewModel) {
     IconButton(
-        onClick = { },
+        onClick = { viewModel.clearInput()},
     ) {
         Icon(
             Icons.Default.Clear,
@@ -175,6 +182,7 @@ val speechIconView = @Composable {
         )
     }
 }
+
 @Composable
 fun AddButton() {
     var isWishlisted by remember { mutableStateOf(false) }
@@ -235,55 +243,58 @@ fun ShowHotelSearchList(
     searchText: String
 ) {
     Column {
-        AppBar(title = stringResource(id = R.string.app_name),
-            )
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)
-            .padding(16.dp)
-    ) {
-        SearchView(searchViewModel, searchText)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn(
-            userScrollEnabled = true,
+        AppBar(
+            title = stringResource(id = R.string.app_name),
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp)
+                .padding(16.dp)
         ) {
-            items(hotels) { hotel ->
-                Card(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .padding(top = 5.dp),
-                    onClick = {
-                        navigationController.navigate(
-                            route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
-                        )
-                    }) {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .weight(1f),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(
-                            modifier = Modifier
-                                .padding(2.dp)
-                                .weight(1f, fill = false),
-                            text = hotel.hotelName,
-                            maxLines = 1,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal,
-                            textAlign = TextAlign.Center,
-                            overflow = TextOverflow . Ellipsis
-                        )
-                        AddButton()
+            SearchView(searchViewModel, searchText)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LazyColumn(
+                userScrollEnabled = true,
+            ) {
+                items(hotels) { hotel ->
+                    Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .padding(top = 5.dp),
+                        onClick = {
+                            navigationController.navigate(
+                                route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
+                            )
+                        }) {
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .weight(1f),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(2.dp)
+                                    .weight(1f, fill = false),
+                                text = hotel.hotelName,
+                                maxLines = 1,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                textAlign = TextAlign.Center,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            AddButton()
+                        }
                     }
                 }
             }
         }
-    }}
+    }
 
 
 }

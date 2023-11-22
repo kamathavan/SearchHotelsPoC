@@ -11,6 +11,7 @@ import com.app.test.search.place.ui.model.HotelSearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,21 +22,23 @@ class HotelSearchListViewModel @Inject constructor(
 
     private val _uiState = MutableLiveData<HotelSearchUiState>()
     val uiState: LiveData<HotelSearchUiState> = _uiState
-    private val _searchText = MutableStateFlow("")
-    val searchText = _searchText.asStateFlow()
-    fun onSearchTextChange(text:String){
-        _searchText.value =  text
+
+    private val _searchInputField = MutableStateFlow("")
+    val searchInputFieldText = _searchInputField.asStateFlow()
+
+    fun onSearchTextChange(searchLocation: String) {
+        _searchInputField.value = searchLocation
     }
 
-    fun getSearchText() : String{
-        return searchText.value
+    fun getSearchText(): String {
+        return searchInputFieldText.value
     }
 
     init {
         getHotelSearch(location = "")
     }
 
-     fun getHotelSearch(location: String) {
+    fun getHotelSearch(location: String) {
         _uiState.value = HotelSearchUiState.Loading
         viewModelScope.launch {
             when (val result = hotelSearchResultUseCase.getHotelSearch(location)) {
@@ -47,10 +50,14 @@ class HotelSearchListViewModel @Inject constructor(
                 is RequestState.FailureState -> {
                     _uiState.value = HotelSearchUiState.Error(message = result.error.toString())
                 }
-                else -> {
-
-                }
             }
         }
     }
+
+    fun clearInput() {
+        _uiState.value = HotelSearchUiState.Loading
+        _searchInputField.update { "" }
+        _uiState.value = HotelSearchUiState.Success(hotels = emptyList())
+    }
+
 }
