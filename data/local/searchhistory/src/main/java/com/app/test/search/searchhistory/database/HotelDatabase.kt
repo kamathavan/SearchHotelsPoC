@@ -32,7 +32,7 @@ abstract class HotelDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     HotelDatabase::class.java,
-                    "movie_database"
+                    "hotel_database"
                 ).build()
 
                 INSTANCE = instance

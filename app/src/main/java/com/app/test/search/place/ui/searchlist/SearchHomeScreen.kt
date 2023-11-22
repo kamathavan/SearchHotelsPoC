@@ -171,7 +171,7 @@ fun ClearInputField(viewModel: HotelSearchListViewModel) {
 }
 
 val speechIconView = @Composable {
-    val context = LocalContext.current
+    LocalContext.current
     IconButton(
         onClick = { },
     ) {
