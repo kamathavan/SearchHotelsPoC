@@ -1,5 +1,7 @@
 package com.app.test.search.place.ui.searchlist
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,9 +42,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -184,14 +186,23 @@ val speechIconView = @Composable {
 }
 
 @Composable
-fun AddButton(viewModel: HotelSearchListViewModel, hotel: Hotel) {
+fun AddButton(
+    viewModel: HotelSearchListViewModel,
+    hotel: Hotel,
+    showToast: () -> Unit
+) {
     var isWishlisted by remember { mutableStateOf(false) }
-
+    val context = LocalContext.current
     IconToggleButton(
         checked = isWishlisted,
         onCheckedChange = {
             isWishlisted = !isWishlisted
-            handleHotelSelectionState(isWishlisted, viewModel, hotel)
+            showToastMessage(
+                context,
+                isWishlisted,
+                hotelListViewModel = viewModel,
+                hotel = hotel
+            )
         }
     ) {
         Icon(
@@ -210,6 +221,7 @@ fun AddButton(viewModel: HotelSearchListViewModel, hotel: Hotel) {
     }
 }
 
+@Composable
 private fun handleHotelSelectionState(
     selectionState: Boolean,
     viewModel: HotelSearchListViewModel,
@@ -220,6 +232,26 @@ private fun handleHotelSelectionState(
     } else {
         viewModel.removeHotelWishList(hotel)
     }
+}
+
+fun showToastMessage(
+    context: Context,
+    isSelected: Boolean,
+    hotelListViewModel: HotelSearchListViewModel,
+    hotel: Hotel
+) {
+    if (isSelected) {
+        hotelListViewModel.addHotelWishList(hotel)
+        Toast.makeText(context, "Hotel saved", Toast.LENGTH_SHORT).show()
+    } else {
+        hotelListViewModel.removeHotelWishList(hotel)
+        Toast.makeText(context, "Hotel removed", Toast.LENGTH_SHORT).show()
+    }
+}
+
+
+fun Something() {
+
 }
 
 @Composable
@@ -301,7 +333,9 @@ fun ShowHotelSearchList(
                                 textAlign = TextAlign.Center,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            AddButton(searchViewModel, hotel)
+                            AddButton(searchViewModel, hotel) {
+                                Something()
+                            }
                         }
                     }
                 }
