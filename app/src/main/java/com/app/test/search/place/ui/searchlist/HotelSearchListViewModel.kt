@@ -50,10 +50,6 @@ class HotelSearchListViewModel @Inject constructor(
                 is RequestState.FailureState -> {
                     _uiState.value = HotelSearchUiState.Error(message = result.error.toString())
                 }
-
-                else -> {
-
-                }
             }
         }
     }
