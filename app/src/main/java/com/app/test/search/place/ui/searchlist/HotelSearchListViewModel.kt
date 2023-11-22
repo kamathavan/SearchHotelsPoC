@@ -24,6 +24,9 @@ class HotelSearchListViewModel @Inject constructor(
     private val _uiState = MutableLiveData<HotelSearchUiState>()
     val uiState: LiveData<HotelSearchUiState> = _uiState
 
+    private val _enableSpeech = MutableLiveData<Boolean>()
+    val enableSpeech: LiveData<Boolean> = _enableSpeech
+
     private val _searchInputField = MutableStateFlow("")
     val searchInputFieldText = _searchInputField.asStateFlow()
 
@@ -59,6 +62,15 @@ class HotelSearchListViewModel @Inject constructor(
         _uiState.value = HotelSearchUiState.Loading
         _searchInputField.update { "" }
         _uiState.value = HotelSearchUiState.Success(hotels = emptyList())
+    }
+
+    fun enableSpeechSearch() {
+        _enableSpeech.postValue(true)
+    }
+
+    fun doSpeechSearch(searchString: String) {
+        _searchInputField.update { searchString }
+        getHotelSearch(searchString)
     }
 
     fun addHotelWishList(hotels: Hotel) {

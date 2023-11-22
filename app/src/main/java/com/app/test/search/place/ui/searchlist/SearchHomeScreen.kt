@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -144,7 +145,7 @@ fun SearchView(
         },
         trailingIcon = {
             if (searchViewModel.getSearchText().isEmpty()) {
-                speechIconView
+                SpeechIconView(searchViewModel)
             } else {
                 ClearInputField(searchViewModel)
             }
@@ -172,10 +173,12 @@ fun ClearInputField(viewModel: HotelSearchListViewModel) {
     }
 }
 
+@Composable
+fun SpeechIconView(viewModel: HotelSearchListViewModel) {
 val speechIconView = @Composable {
     LocalContext.current
     IconButton(
-        onClick = { },
+        onClick = { viewModel.enableSpeechSearch() },
     ) {
         Icon(
             Icons.Filled.PlayArrow,
