@@ -160,7 +160,7 @@ fun SearchView(
 @Composable
 fun ClearInputField(viewModel: HotelSearchListViewModel) {
     IconButton(
-        onClick = { viewModel.clearInput()},
+        onClick = { viewModel.clearInput() },
     ) {
         Icon(
             Icons.Default.Clear,
@@ -184,13 +184,14 @@ val speechIconView = @Composable {
 }
 
 @Composable
-fun AddButton() {
+fun AddButton(viewModel: HotelSearchListViewModel, hotel: Hotel) {
     var isWishlisted by remember { mutableStateOf(false) }
 
     IconToggleButton(
         checked = isWishlisted,
         onCheckedChange = {
             isWishlisted = !isWishlisted
+            handleHotelSelectionState(isWishlisted, viewModel, hotel)
         }
     ) {
         Icon(
@@ -206,6 +207,18 @@ fun AddButton() {
             },
             contentDescription = null
         )
+    }
+}
+
+private fun handleHotelSelectionState(
+    selectionState: Boolean,
+    viewModel: HotelSearchListViewModel,
+    hotel: Hotel
+) {
+    if (selectionState) {
+        viewModel.addHotelWishList(hotel)
+    } else {
+        viewModel.removeHotelWishList(hotel)
     }
 }
 
@@ -288,7 +301,7 @@ fun ShowHotelSearchList(
                                 textAlign = TextAlign.Center,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            AddButton()
+                            AddButton(searchViewModel, hotel)
                         }
                     }
                 }

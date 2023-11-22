@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.test.domain.search.models.Hotel
 import com.app.test.domain.search.models.RequestState
 import com.app.test.domain.search.usecase.GetHotelSearchResultUseCase
 import com.app.test.search.place.ui.model.HotelSearchUiState
@@ -58,6 +59,14 @@ class HotelSearchListViewModel @Inject constructor(
         _uiState.value = HotelSearchUiState.Loading
         _searchInputField.update { "" }
         _uiState.value = HotelSearchUiState.Success(hotels = emptyList())
+    }
+
+    fun addHotelWishList(hotels: Hotel) {
+        // we need to add hotel wishlist part in the data base part
+    }
+
+    fun removeHotelWishList(hotel: Hotel) {
+        // we need to remove hotel wishlist part in the data base part
     }
 
 }
