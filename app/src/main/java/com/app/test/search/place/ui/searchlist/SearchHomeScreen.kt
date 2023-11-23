@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -313,17 +314,17 @@ fun ShowHotelSearchList(
         ) {
             SearchView(searchViewModel, searchText)
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            /* Divider(Modifier.height(1.dp))*/
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 ShowFavListButton(navigationController)
             }
 
+            Spacer(modifier = Modifier.height(8.dp))
+
             Divider(Modifier.height(1.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             LazyColumn(
                 userScrollEnabled = true,
@@ -332,7 +333,10 @@ fun ShowHotelSearchList(
                     Card(modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                        .padding(top = 5.dp),
+                        .padding(top = 2.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        ),
                         onClick = {
                             navigationController.navigate(
                                 route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
