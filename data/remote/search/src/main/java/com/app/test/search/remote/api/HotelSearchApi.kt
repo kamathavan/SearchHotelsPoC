@@ -14,7 +14,7 @@ interface HotelSearchApi {
     ): HotelSearchResultResponse
 
     companion object {
-        const val TIME_OUT = 30
+        const val TIME_OUT = 60
         const val BASE_URL = "https://engine.hotellook.com/"
         const val SEARCH_ENDPOINT = "api/v2/lookup.json"
     }

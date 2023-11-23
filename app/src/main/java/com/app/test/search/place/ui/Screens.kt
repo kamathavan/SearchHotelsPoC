@@ -13,4 +13,9 @@ sealed class Screens(
         route = "hotel_details",
         screenName = "Hotel Details"
     )
+
+    object HotelFavList : Screens(
+        route = "hotel_fav_list",
+        screenName = "Hotel Fav List"
+    )
 }

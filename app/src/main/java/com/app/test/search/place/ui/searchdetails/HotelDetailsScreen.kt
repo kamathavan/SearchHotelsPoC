@@ -70,9 +70,9 @@ fun HotelDetailsScreen(hotel: Hotel) {
 
                 ContentTitle(hotel.locationName)
 
-                Title(contentTitle = "Hotel Rating Points")
+                Title(contentTitle = "Hotel Contact Number")
 
-                ContentTitle(hotel.hotelScorePoint)
+                ContentTitle(hotel.contactNumber)
             }
         }
     }
@@ -160,7 +160,8 @@ fun HotelDetailsScreenPreview() {
                 hotelScorePoint = "",
                 geoLocation = HotelGeoLocation(
                     12.90, 45.90
-                )
+                ),
+                contactNumber = "9898838383"
             )
         )
     }

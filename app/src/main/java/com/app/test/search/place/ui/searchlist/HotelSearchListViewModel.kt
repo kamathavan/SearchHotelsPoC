@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.test.domain.search.models.Hotel
+import com.app.test.domain.search.models.HotelGeoLocation
 import com.app.test.domain.search.models.RequestState
 import com.app.test.domain.search.usecase.GetHotelSearchResultUseCase
 import com.app.test.search.place.ui.model.HotelSearchUiState
@@ -73,6 +74,46 @@ class HotelSearchListViewModel @Inject constructor(
         getHotelSearch(searchString)
     }
 
+    fun getFavHotelList() : List<Hotel> {
+        return listOf(
+            Hotel(
+                hotelId = "63634",
+                hotelName = "Chola Hotel",
+                locationId = 0,
+                locationName = "Testing",
+                address = "Chennai",
+                hotelScorePoint = "",
+                geoLocation = HotelGeoLocation(
+                    12.90, 45.90
+                ),
+                contactNumber = "9038305903"
+            ),
+            Hotel(
+                hotelId = "6363",
+                hotelName = "Maritian Hotel",
+                locationId = 0,
+                locationName = "Testing",
+                address = "Chennai",
+                hotelScorePoint = "",
+                geoLocation = HotelGeoLocation(
+                    12.90, 45.90
+                ),
+                contactNumber = "9038305903"
+            ),
+            Hotel(
+                hotelId = "6364",
+                hotelName = "ITC Hotel",
+                locationId = 0,
+                locationName = "Testing",
+                address = "Chennai",
+                hotelScorePoint = "",
+                geoLocation = HotelGeoLocation(
+                    12.90, 45.90
+                ),
+                contactNumber = "9038305903"
+            )
+        )
+    }
     fun addHotelWishList(hotels: Hotel) {
         // we need to add hotel wishlist part in the data base part
     }

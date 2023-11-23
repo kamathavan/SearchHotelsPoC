@@ -1,5 +1,6 @@
 package com.app.test.search.place.ui.searchlist
 
+import android.widget.Button
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -23,8 +25,10 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,6 +65,7 @@ import androidx.navigation.compose.rememberNavController
 import com.app.test.domain.search.models.Hotel
 import com.app.test.search.place.R
 import com.app.test.search.place.ui.Screens
+import com.app.test.search.place.ui.hotelfavlistscreen.ShowHotelFavListScreen
 import com.app.test.search.place.ui.model.HotelSearchUiState
 import com.app.test.search.place.ui.searchdetails.AppBar
 import com.app.test.search.place.ui.searchdetails.HotelDetailsScreen
@@ -120,6 +125,13 @@ fun HotelNavigation(
                 hotel = hotel
             )
         }
+
+        composable(route = Screens.HotelFavList.route) {
+            ShowHotelFavListScreen(
+                hotels = searchViewModel.getFavHotelList()
+            )
+        }
+
     }
 
 }
@@ -209,7 +221,7 @@ fun AddButton(
         }
     ) {
         Icon(
-            tint = Color.Black,
+            tint = Color.Blue,
             modifier = Modifier.graphicsLayer {
                 scaleX = 1.0f
                 scaleY = 1.0f
@@ -304,6 +316,16 @@ fun ShowHotelSearchList(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+           /* Divider(Modifier.height(1.dp))*/
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                ShowFavListButton(navigationController)
+            }
+
+            Divider(Modifier.height(1.dp))
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             LazyColumn(
                 userScrollEnabled = true,
             ) {
@@ -345,7 +367,15 @@ fun ShowHotelSearchList(
             }
         }
     }
+}
 
-
+@Composable
+fun ShowFavListButton(navigationController: NavController) {
+    Button(onClick = {
+        navigationController.navigate(
+            route = "${Screens.HotelFavList.route}")
+    }) {
+        Text(text = "Favourite Hotels")
+    }
 }
 
