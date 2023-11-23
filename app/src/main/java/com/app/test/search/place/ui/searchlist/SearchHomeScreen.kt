@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -49,7 +48,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -187,8 +185,6 @@ fun ClearInputField(viewModel: HotelSearchListViewModel) {
 
 @Composable
 fun SpeechIconView(viewModel: HotelSearchListViewModel) {
-val speechIconView = @Composable {
-    LocalContext.current
     IconButton(
         onClick = { viewModel.enableSpeechSearch() },
     ) {
@@ -257,10 +253,10 @@ fun showToastMessage(
 ) {
     if (isSelected) {
         hotelListViewModel.addHotelWishList(hotel)
-        Toast.makeText(context, "Hotel saved", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Thank you for Choosing This Hotel, The Support Team will Contact You", Toast.LENGTH_SHORT).show()
     } else {
         hotelListViewModel.removeHotelWishList(hotel)
-        Toast.makeText(context, "Hotel removed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Hotel Removed From Favourite List", Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -316,7 +312,7 @@ fun ShowHotelSearchList(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-           /* Divider(Modifier.height(1.dp))*/
+            /* Divider(Modifier.height(1.dp))*/
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 ShowFavListButton(navigationController)
