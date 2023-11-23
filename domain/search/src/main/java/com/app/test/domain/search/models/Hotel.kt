@@ -8,6 +8,7 @@ data class Hotel(
     val address: String,
     val hotelScorePoint:String,
     val geoLocation: HotelGeoLocation,
+    val contactNumber: String = ""
 )
 
 data class HotelGeoLocation(

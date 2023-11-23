@@ -18,7 +18,8 @@ class HotelSearchResponseMapper @Inject constructor() {
                 locationName = hotelResp.locationName,
                 address = hotelResp.fullName,
                 hotelScorePoint = hotelResp._score.toString(),
-                geoLocation = getGeoLatLong(hotelResp.location)
+                geoLocation = getGeoLatLong(hotelResp.location),
+                contactNumber = getMobileNumber()
             )
             hotelList.add(hotel)
         }
@@ -30,5 +31,11 @@ class HotelSearchResponseMapper @Inject constructor() {
             lat = location.lat,
             long = location.lon
         )
+    }
+
+    private fun getMobileNumber() : String {
+        val number1 = (0..9).random()
+        val number2 = (0..9).random()
+        return "97883$number1" + "839$number2"
     }
 }

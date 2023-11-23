@@ -1,5 +1,6 @@
 package com.app.test.search.place.ui.searchlist
 
+import android.widget.Button
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -23,8 +24,11 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,9 +46,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -60,6 +66,7 @@ import androidx.navigation.compose.rememberNavController
 import com.app.test.domain.search.models.Hotel
 import com.app.test.search.place.R
 import com.app.test.search.place.ui.Screens
+import com.app.test.search.place.ui.hotelfavlistscreen.ShowHotelFavListScreen
 import com.app.test.search.place.ui.model.HotelSearchUiState
 import com.app.test.search.place.ui.searchdetails.AppBar
 import com.app.test.search.place.ui.searchdetails.HotelDetailsScreen
@@ -119,6 +126,13 @@ fun HotelNavigation(
                 hotel = hotel
             )
         }
+
+        composable(route = Screens.HotelFavList.route) {
+            ShowHotelFavListScreen(
+                hotels = searchViewModel.getFavHotelList()
+            )
+        }
+
     }
 
 }
@@ -144,7 +158,7 @@ fun SearchView(
         },
         trailingIcon = {
             if (searchViewModel.getSearchText().isEmpty()) {
-                speechIconView
+                SpeechIconView(searchViewModel)
             } else {
                 ClearInputField(searchViewModel)
             }
@@ -172,13 +186,14 @@ fun ClearInputField(viewModel: HotelSearchListViewModel) {
     }
 }
 
-val speechIconView = @Composable {
-    LocalContext.current
+@Composable
+fun SpeechIconView(viewModel: HotelSearchListViewModel) {
     IconButton(
-        onClick = { },
+        onClick = { viewModel.enableSpeechSearch() },
     ) {
+        val imageVector = ImageVector.vectorResource(id = R.drawable.mic)
         Icon(
-            Icons.Filled.PlayArrow,
+            imageVector,
             contentDescription = "",
             tint = Color.Black
         )
@@ -206,7 +221,7 @@ fun AddButton(
         }
     ) {
         Icon(
-            tint = Color.Black,
+            tint = Color.Blue,
             modifier = Modifier.graphicsLayer {
                 scaleX = 1.0f
                 scaleY = 1.0f
@@ -242,10 +257,10 @@ fun showToastMessage(
 ) {
     if (isSelected) {
         hotelListViewModel.addHotelWishList(hotel)
-        Toast.makeText(context, "Hotel saved", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Thank you for Choosing This Hotel, The Support Team will Contact You", Toast.LENGTH_SHORT).show()
     } else {
         hotelListViewModel.removeHotelWishList(hotel)
-        Toast.makeText(context, "Hotel removed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Hotel Removed From Favourite List", Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -299,7 +314,17 @@ fun ShowHotelSearchList(
         ) {
             SearchView(searchViewModel, searchText)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                ShowFavListButton(navigationController)
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Divider(Modifier.height(1.dp))
+
+            Spacer(modifier = Modifier.height(4.dp))
 
             LazyColumn(
                 userScrollEnabled = true,
@@ -308,7 +333,10 @@ fun ShowHotelSearchList(
                     Card(modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
-                        .padding(top = 5.dp),
+                        .padding(top = 2.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer
+                        ),
                         onClick = {
                             navigationController.navigate(
                                 route = "${Screens.HotelDetails.route}/${hotel.hotelId}"
@@ -342,7 +370,15 @@ fun ShowHotelSearchList(
             }
         }
     }
+}
 
-
+@Composable
+fun ShowFavListButton(navigationController: NavController) {
+    Button(onClick = {
+        navigationController.navigate(
+            route = "${Screens.HotelFavList.route}")
+    }) {
+        Text(text = "Favourite Hotels")
+    }
 }
 
