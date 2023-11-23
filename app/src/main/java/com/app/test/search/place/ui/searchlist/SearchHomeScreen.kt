@@ -47,7 +47,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -188,8 +190,9 @@ fun SpeechIconView(viewModel: HotelSearchListViewModel) {
     IconButton(
         onClick = { viewModel.enableSpeechSearch() },
     ) {
+        val imageVector = ImageVector.vectorResource(id = R.drawable.mic)
         Icon(
-            Icons.Filled.PlayArrow,
+            imageVector,
             contentDescription = "",
             tint = Color.Black
         )
