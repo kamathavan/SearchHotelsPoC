@@ -16,28 +16,36 @@ import com.app.test.search.searchhistory.entity.HotelEntity
 abstract class HotelDatabase : RoomDatabase() {
     abstract fun getHotelDao(): HotelDao
 
-    companion object {
-        @Volatile
-        private var INSTANCE: HotelDatabase? = null
+    /*  companion object {
+          @Volatile
+          private var INSTANCE: HotelDatabase? = null
 
-        fun getDatabase(context: Context): HotelDatabase {
+          fun getDatabase(context: Context): HotelDatabase {
 
-            val tempInstance = INSTANCE
+              val tempInstance = INSTANCE
 
-            if (tempInstance != null) {
-                return tempInstance
-            }
+              if (tempInstance != null) {
+                  return tempInstance
+              }
 
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    HotelDatabase::class.java,
-                    "hotel_database"
-                ).build()
+              synchronized(this) {
+                  val instance = Room.databaseBuilder(
+                      context.applicationContext,
+                      HotelDatabase::class.java,
+                      "hotel_database"
+                  ).build()
 
-                INSTANCE = instance
-                return instance
-            }
-        }
-    }
+                  INSTANCE = instance
+                  return instance
+              }
+          }
+      }*/
+}
+
+object HotelDatabaseFactory {
+    fun getHotelDataBase(context: Context) = Room.databaseBuilder(
+        context.applicationContext,
+        HotelDatabase::class.java,
+        name = "hotel_database",
+    ).build()
 }
