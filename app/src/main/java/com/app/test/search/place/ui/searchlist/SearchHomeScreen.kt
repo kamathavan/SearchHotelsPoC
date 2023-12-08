@@ -77,18 +77,18 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
 
     val searchText by searchViewModel.searchInputFieldText.collectAsState()
 
-    state.value?.let { uistate ->
-        when (uistate) {
+    state.value?.let { uiState ->
+        when (uiState) {
             is HotelSearchUiState.Loading -> {
                 LoadingContent()
             }
 
             is HotelSearchUiState.Success -> {
-                HotelNavigation(uistate.hotels, searchViewModel, searchText)
+                HotelNavigation(uiState.hotels, searchViewModel, searchText)
             }
 
             is HotelSearchUiState.Error -> {
-                ErrorScreen(uistate.message)
+                ErrorScreen(uiState.message)
             }
         }
     }
@@ -139,7 +139,7 @@ fun SearchView(
     OutlinedTextField(
         value = searchString,
         onValueChange = searchViewModel::onSearchTextChange,
-        placeholder = { Text(text = "Enter Location") },
+        placeholder = { Text(text = stringResource(R.string.enter_location)) },
         modifier = Modifier.fillMaxWidth(),
         leadingIcon = {
             Icon(
@@ -195,20 +195,19 @@ fun SpeechIconView(viewModel: HotelSearchListViewModel) {
 }
 
 @Composable
-fun AddButton(
+fun AddFavouriteButton(
     viewModel: HotelSearchListViewModel,
     hotel: Hotel,
-    showToast: () -> Unit
 ) {
-    var isWishlisted by remember { mutableStateOf(false) }
+    var isFavouriteHotel by remember { mutableStateOf(false) }
     val context = LocalContext.current
     IconToggleButton(
-        checked = isWishlisted,
+        checked = isFavouriteHotel,
         onCheckedChange = {
-            isWishlisted = !isWishlisted
+            isFavouriteHotel = !isFavouriteHotel
             showToastMessage(
                 context,
-                isWishlisted,
+                isFavouriteHotel,
                 hotelListViewModel = viewModel,
                 hotel = hotel
             )
@@ -220,7 +219,7 @@ fun AddButton(
                 scaleX = 1.0f
                 scaleY = 1.0f
             },
-            imageVector = if (isWishlisted) {
+            imageVector = if (isFavouriteHotel) {
                 Icons.Filled.Favorite
             } else {
                 Icons.Default.FavoriteBorder
@@ -230,41 +229,26 @@ fun AddButton(
     }
 }
 
-@Composable
-private fun handleHotelSelectionState(
-    selectionState: Boolean,
-    viewModel: HotelSearchListViewModel,
-    hotel: Hotel
-) {
-    if (selectionState) {
-        viewModel.addHotelWishList(hotel)
-    } else {
-        viewModel.removeHotelWishList(hotel)
-    }
-}
-
 fun showToastMessage(
     context: Context,
-    isSelected: Boolean,
+    isFavouriteHotelAdded: Boolean,
     hotelListViewModel: HotelSearchListViewModel,
     hotel: Hotel
 ) {
-    if (isSelected) {
+    if (isFavouriteHotelAdded) {
         hotelListViewModel.addHotelWishList(hotel)
         Toast.makeText(
             context,
-            "Thank you for Choosing This Hotel, The Support Team will Contact You",
+            context.getString(R.string.thank_you_for_choosing_this_hotel_the_support_team_will_contact_you),
             Toast.LENGTH_SHORT
         ).show()
     } else {
         hotelListViewModel.removeHotelWishList(hotel)
-        Toast.makeText(context, "Hotel Removed From Favourite List", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            context,
+            context.getString(R.string.hotel_removed_from_favourite_list), Toast.LENGTH_SHORT
+        ).show()
     }
-}
-
-
-fun Something() {
-
 }
 
 @Composable
@@ -359,9 +343,7 @@ fun ShowHotelSearchList(
                                 textAlign = TextAlign.Center,
                                 overflow = TextOverflow.Ellipsis
                             )
-                            AddButton(searchViewModel, hotel) {
-                                Something()
-                            }
+                            AddFavouriteButton(searchViewModel, hotel)
                         }
                     }
                 }
@@ -377,7 +359,7 @@ fun ShowFavListButton(navigationController: NavController) {
             route = Screens.HotelFavList.route
         )
     }) {
-        Text(text = "Favourite Hotels")
+        Text(text = stringResource(R.string.favourite_hotels))
     }
 }
 

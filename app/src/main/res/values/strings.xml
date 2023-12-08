@@ -3,4 +3,8 @@
     <string name="feature_hotel_detail_title">Hotel Details</string>
     <string name="favourite_hotel_list">Favourite Hotel List</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="thank_you_for_choosing_this_hotel_the_support_team_will_contact_you">Thank you for Choosing This Hotel, The Support Team will Contact You</string>
+    <string name="hotel_removed_from_favourite_list">Hotel Removed From Favourite List</string>
+    <string name="enter_location">Enter Location</string>
+    <string name="favourite_hotels">Favourite Hotels</string>
 </resources>

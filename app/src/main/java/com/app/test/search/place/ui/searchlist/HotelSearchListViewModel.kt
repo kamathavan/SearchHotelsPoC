@@ -78,48 +78,6 @@ class HotelSearchListViewModel @Inject constructor(
         _searchInputField.update { searchString }
         getHotelSearch(searchString)
     }
-
-    fun getFavHotelList(): List<Hotel> {
-        return listOf(
-            Hotel(
-                hotelId = "63634",
-                hotelName = "Chola Hotel",
-                locationId = 0,
-                locationName = "Testing",
-                address = "Chennai",
-                hotelScorePoint = "",
-                geoLocation = HotelGeoLocation(
-                    12.90, 45.90
-                ),
-                contactNumber = "9038305903"
-            ),
-            Hotel(
-                hotelId = "6363",
-                hotelName = "Maritian Hotel",
-                locationId = 0,
-                locationName = "Testing",
-                address = "Chennai",
-                hotelScorePoint = "",
-                geoLocation = HotelGeoLocation(
-                    12.90, 45.90
-                ),
-                contactNumber = "9038305903"
-            ),
-            Hotel(
-                hotelId = "6364",
-                hotelName = "ITC Hotel",
-                locationId = 0,
-                locationName = "Testing",
-                address = "Chennai",
-                hotelScorePoint = "",
-                geoLocation = HotelGeoLocation(
-                    12.90, 45.90
-                ),
-                contactNumber = "9038305903"
-            )
-        )
-    }
-
     fun addHotelWishList(hotels: Hotel) {
         // we need to add hotel wishlist part in the data base part
         viewModelScope.launch {
