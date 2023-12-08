@@ -1,6 +1,5 @@
 package com.app.test.search.place.ui.searchlist
 
-import android.widget.Button
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -46,10 +44,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -58,7 +56,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -78,21 +75,20 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
 
     val state = searchViewModel.uiState.observeAsState()
 
-    val searchViewModel = viewModel<HotelSearchListViewModel>()
     val searchText by searchViewModel.searchInputFieldText.collectAsState()
 
-    state.value?.let { state ->
-        when (state) {
+    state.value?.let { uistate ->
+        when (uistate) {
             is HotelSearchUiState.Loading -> {
                 LoadingContent()
             }
 
             is HotelSearchUiState.Success -> {
-                HotelNavigation(state.hotels, searchViewModel, searchText)
+                HotelNavigation(uistate.hotels, searchViewModel, searchText)
             }
 
             is HotelSearchUiState.Error -> {
-                ErrorScreen(state.message)
+                ErrorScreen(uistate.message)
             }
         }
     }
@@ -128,9 +124,7 @@ fun HotelNavigation(
         }
 
         composable(route = Screens.HotelFavList.route) {
-            ShowHotelFavListScreen(
-                hotels = searchViewModel.getFavHotelList()
-            )
+            ShowHotelFavListScreen()
         }
 
     }
@@ -257,7 +251,11 @@ fun showToastMessage(
 ) {
     if (isSelected) {
         hotelListViewModel.addHotelWishList(hotel)
-        Toast.makeText(context, "Thank you for Choosing This Hotel, The Support Team will Contact You", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            context,
+            "Thank you for Choosing This Hotel, The Support Team will Contact You",
+            Toast.LENGTH_SHORT
+        ).show()
     } else {
         hotelListViewModel.removeHotelWishList(hotel)
         Toast.makeText(context, "Hotel Removed From Favourite List", Toast.LENGTH_SHORT).show()
@@ -376,7 +374,8 @@ fun ShowHotelSearchList(
 fun ShowFavListButton(navigationController: NavController) {
     Button(onClick = {
         navigationController.navigate(
-            route = "${Screens.HotelFavList.route}")
+            route = Screens.HotelFavList.route
+        )
     }) {
         Text(text = "Favourite Hotels")
     }

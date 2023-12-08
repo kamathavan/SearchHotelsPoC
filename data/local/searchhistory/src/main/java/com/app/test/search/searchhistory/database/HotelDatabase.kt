@@ -12,11 +12,10 @@ import com.app.test.search.searchhistory.entity.HotelEntity
     version = 1,
     exportSchema = false
 )
-
 abstract class HotelDatabase : RoomDatabase() {
     abstract fun getHotelDao(): HotelDao
 
-    /*  companion object {
+      companion object {
           @Volatile
           private var INSTANCE: HotelDatabase? = null
 
@@ -32,20 +31,13 @@ abstract class HotelDatabase : RoomDatabase() {
                   val instance = Room.databaseBuilder(
                       context.applicationContext,
                       HotelDatabase::class.java,
-                      "hotel_database"
+                      "hotel.db"
                   ).build()
 
                   INSTANCE = instance
                   return instance
               }
           }
-      }*/
+      }
 }
 
-object HotelDatabaseFactory {
-    fun getHotelDataBase(context: Context) = Room.databaseBuilder(
-        context.applicationContext,
-        HotelDatabase::class.java,
-        name = "hotel_database",
-    ).build()
-}

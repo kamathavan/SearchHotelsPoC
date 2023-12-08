@@ -8,18 +8,23 @@ import androidx.room.PrimaryKey
 data class HotelEntity(
     @PrimaryKey
     @ColumnInfo(name = "hotelId")
-    var hotelId: String,
+    val hotelId: String,
     @ColumnInfo(name = "hotelName")
-    var hotelName: String,
+    val hotelName: String,
     @ColumnInfo(name = "address")
-    var address: String,
+    val address: String,
     @ColumnInfo(name = "locationName")
     val locationName: String,
     @ColumnInfo(name = "hotelScorePoint")
     val hotelScorePoint: String,
+    @ColumnInfo(name = "hotelGeoLocationLat")
+    val hotelGeoLocationLat: Double,
+    @ColumnInfo(name = "hotelGeoLocationLong")
+    val hotelGeoLocationLong: Double,
+    @ColumnInfo(name = "contactNumber")
+    val hotelContactNumber: String,
 ) {
     companion object {
-        const val TABLE_NAME = "WishlistHotel"
+        const val TABLE_NAME = "FAVOURITE_HOTEL"
     }
-
 }

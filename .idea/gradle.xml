@@ -14,11 +14,11 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/data/local" />
-            <option value="$PROJECT_DIR$/data/local/localdatasearch" />
             <option value="$PROJECT_DIR$/data/local/searchhistory" />
             <option value="$PROJECT_DIR$/data/remote" />
             <option value="$PROJECT_DIR$/data/remote/search" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/domain/favouritehotellist" />
             <option value="$PROJECT_DIR$/domain/search" />
           </set>
         </option>
