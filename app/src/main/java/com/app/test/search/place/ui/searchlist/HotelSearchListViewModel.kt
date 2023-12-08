@@ -9,9 +9,11 @@ import com.app.test.domain.search.models.Hotel
 import com.app.test.domain.search.models.HotelGeoLocation
 import com.app.test.domain.search.models.RequestState
 import com.app.test.domain.search.usecase.GetHotelSearchResultUseCase
+import com.app.test.search.favouritehotellist.usecase.DeleteFavouriteHotelUseCase
 import com.app.test.search.favouritehotellist.usecase.InsertFavouriteHotelUseCase
 import com.app.test.search.place.ui.model.HotelSearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class HotelSearchListViewModel @Inject constructor(
     private val hotelSearchResultUseCase: GetHotelSearchResultUseCase,
     private val insertFavouriteHotelUseCase: InsertFavouriteHotelUseCase,
+    private val deleteFavouriteHotelUseCase: DeleteFavouriteHotelUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData<HotelSearchUiState>()
@@ -122,11 +125,12 @@ class HotelSearchListViewModel @Inject constructor(
         viewModelScope.launch {
             insertFavouriteHotelUseCase.invoke(hotels)
         }
-
     }
 
     fun removeHotelWishList(hotel: Hotel) {
-        // we need to remove hotel wishlist part in the data base part
+        viewModelScope.launch(Dispatchers.Main) {
+            deleteFavouriteHotelUseCase.invoke(hotel)
+        }
     }
 
 }

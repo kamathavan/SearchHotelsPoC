@@ -7,4 +7,6 @@ interface FavouritesRepository {
     suspend fun insertFavouriteHotel(hotel: Hotel)
 
     suspend fun getFavouriteHotel(): Flow<List<Hotel>>
+
+    suspend fun deleteFavouriteHotel(hotelId:Hotel)
 }

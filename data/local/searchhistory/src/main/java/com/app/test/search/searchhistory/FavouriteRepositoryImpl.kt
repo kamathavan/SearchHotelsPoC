@@ -21,4 +21,8 @@ class FavouriteRepositoryImpl @Inject constructor(
             hotelEntity.toHotels()
         }
     }
+
+    override suspend fun deleteFavouriteHotel(hotel: Hotel) {
+        return hotelDao.deleteWishListHotel(hotel = hotel.toHotelEntity())
+    }
 }
