@@ -7,4 +7,6 @@
     <string name="hotel_removed_from_favourite_list">Hotel Removed From Favourite List</string>
     <string name="enter_location">Enter Location</string>
     <string name="favourite_hotels">Favourite Hotels</string>
+    <string name="speak_something">Speak Something</string>
+    <string name="speech_not_available">Speech not Available</string>
 </resources>

@@ -71,10 +71,10 @@ import com.app.test.search.place.ui.searchdetails.HotelDetailsScreen
 const val HOTEL_ID_KEY = "hotelId"
 
 @Composable
-fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()) {
+fun SearchHomeScreen() {
 
+    val searchViewModel: HotelSearchListViewModel = hiltViewModel()
     val state = searchViewModel.uiState.observeAsState()
-
     val searchText by searchViewModel.searchInputFieldText.collectAsState()
 
     state.value?.let { uiState ->
@@ -84,7 +84,7 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
             }
 
             is HotelSearchUiState.Success -> {
-                HotelNavigation(uiState.hotels, searchViewModel, searchText)
+                SearchHotelResult(uiState.hotels, searchViewModel, searchText)
             }
 
             is HotelSearchUiState.Error -> {
@@ -95,7 +95,7 @@ fun SearchHomeScreen(searchViewModel: HotelSearchListViewModel = hiltViewModel()
 }
 
 @Composable
-fun HotelNavigation(
+fun SearchHotelResult(
     hotels: List<Hotel>,
     searchViewModel: HotelSearchListViewModel,
     searchText: String,
@@ -103,7 +103,6 @@ fun HotelNavigation(
     val hotelNavigationController = rememberNavController()
 
     NavHost(navController = hotelNavigationController, startDestination = Screens.HotelList.route) {
-
         composable(route = Screens.HotelList.route) {
             ShowHotelSearchList(
                 navigationController = hotelNavigationController,
@@ -112,7 +111,6 @@ fun HotelNavigation(
                 searchText
             )
         }
-
         composable(route = "${Screens.HotelDetails.route}/{$HOTEL_ID_KEY}") {
             val hotelId = it.arguments?.getString(HOTEL_ID_KEY)
             val hotel = hotels.first { hotel ->
@@ -122,13 +120,10 @@ fun HotelNavigation(
                 hotel = hotel
             )
         }
-
         composable(route = Screens.HotelFavList.route) {
             ShowHotelFavListScreen()
         }
-
     }
-
 }
 
 @Composable

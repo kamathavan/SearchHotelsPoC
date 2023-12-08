@@ -47,14 +47,14 @@ class HotelSearchActivity : ComponentActivity() {
 
     private fun getSpeechInput(context: Context) {
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
-            Toast.makeText(context, "Speech not Available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.speech_not_available), Toast.LENGTH_SHORT).show()
         } else {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             intent.putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH
             )
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak Something")
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speak_something))
             startActivityForResult(intent, 101)
         }
     }
