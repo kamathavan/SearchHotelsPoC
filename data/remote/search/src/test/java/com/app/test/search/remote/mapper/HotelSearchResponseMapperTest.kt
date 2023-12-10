@@ -1,57 +1,50 @@
-package com.app.test.search.remote.repository
+package com.app.test.search.remote.mapper
 
-import com.app.test.search.remote.api.HotelSearchApi
-import com.app.test.search.remote.datasource.HotelSearchDataSourceImpl
 import com.app.test.search.remote.responsemodel.Hotel
 import com.app.test.search.remote.responsemodel.HotelSearchResultResponse
 import com.app.test.search.remote.responsemodel.Hotels
 import com.app.test.search.remote.responsemodel.HotelsLocation
 import com.google.common.truth.Truth.assertThat
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
-import io.mockk.impl.annotations.MockK
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
-class HotelSearchRepositoryImplTest {
+class HotelSearchResponseMapperTest {
 
-    private lateinit var hotelSearchDataSource: HotelSearchDataSourceImpl
-
-    @MockK
-    lateinit var hotelSearchAPI: HotelSearchApi
+    private lateinit var hotelSearchResponseMapper: HotelSearchResponseMapper
 
     @Before
     fun setUp() {
-        MockKAnnotations.init(this)
-        hotelSearchDataSource = HotelSearchDataSourceImpl(
-            hotelSearchApi = hotelSearchAPI
-        )
+        hotelSearchResponseMapper = HotelSearchResponseMapper()
     }
 
-    // region for unit test
     @Test
-    fun `Given Hotel Search API, When Hotel search data sources called, Then return success HotelSearch response`() =
-        runTest {
-            //given
-            coEvery {
-                hotelSearchAPI.searchHotels(
-                    query = "some_location",
-                    lang = "en",
-                    lookFor = "hotel",
-                    limit = 20
-                )
-            } returns getSearchResponse()
+    fun `Given Hotel Search response, When transform, Then return list Search Hotel Domain Response`() {
+        //Given
+        val hotelResponse = getSearchResponse()
 
-            //When
-            val result = hotelSearchDataSource.searchResultsForHotel(searchQuery = "some_location")
+        //When
+        val actualResult = hotelSearchResponseMapper.transform(
+            hotelSearchResponse = hotelResponse
+        )
+        //Then
 
-            // Then
-            assertThat(result.status).isEqualTo("ok")
-        }
-    // endregion for unit testing
+        assertThat(actualResult.size).isEqualTo(2)
+
+        val hotelId = "some_id1"
+        val hotelName =  "some_hotel1"
+        val scorePoint = "12"
+        val address =  "some_hotel_full_name1"
+        val locationId = 23
+        val locationName = "some_location1"
+
+        assertThat(actualResult[0].hotelId).isEqualTo(hotelId)
+        assertThat(actualResult[0].hotelName).isEqualTo(hotelName)
+        assertThat(actualResult[0].hotelScorePoint).isEqualTo(scorePoint)
+        assertThat(actualResult[0].address).isEqualTo(address)
+        assertThat(actualResult[0].locationId).isEqualTo(locationId)
+        assertThat(actualResult[0].locationName).isEqualTo(locationName)
+
+    }
 
     // region for stubbing response
     private fun getSearchResponse(): HotelSearchResultResponse {
