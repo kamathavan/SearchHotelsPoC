@@ -196,6 +196,7 @@ fun AddFavouriteButton(
 ) {
     var isFavouriteHotel by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
     IconToggleButton(
         checked = isFavouriteHotel,
         onCheckedChange = {

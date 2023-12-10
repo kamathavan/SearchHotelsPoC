@@ -6,12 +6,12 @@ import com.app.test.search.remote.responsemodel.Hotel
 import com.app.test.search.remote.responsemodel.HotelSearchResultResponse
 import com.app.test.search.remote.responsemodel.Hotels
 import com.app.test.search.remote.responsemodel.HotelsLocation
+import com.google.common.truth.Truth.assertThat
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -49,7 +49,7 @@ class HotelSearchRepositoryImplTest {
             val result = hotelSearchDataSource.searchResultsForHotel(searchQuery = "some_location")
 
             // Then
-
+            assertThat(result.status).isEqualTo("ok")
         }
     // endregion for unit testing
 
